@@ -1,9 +1,9 @@
 # Kablooey
-The announcement commands for Kablooey
-<br />
-Also creates and manages a list of Discord Nitro Users for the game.
-<br />
-Keeps track of and updates Metrics messages too
+- Grants announcement commands for Kablooey
+
+- Creates & syncs a list of Discord Nitro boosters with Sitekick Remastered
+
+- Keeps track of updates and live metrics message
 
 ---
 
