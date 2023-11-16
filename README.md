@@ -30,4 +30,5 @@ Keeps track of and updates Metrics messages too
 
 ## Dependencies
 JDA - https://github.com/discord-jda/JDA
+
 JDK - 16.0.2
