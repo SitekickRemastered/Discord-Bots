@@ -9,6 +9,6 @@ A bot that links discord accounts to Sitekick Remastered.
 >/link [code]
 
 # Dependencies
-JDA - https://github.com/discord-jda/JDA
+JDA v5.0.0-beta.17 (Included) - https://github.com/discord-jda/JDA
 
-JDK - 16.0.2
+Amazon Corretto 21 (OpenJDK) - https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.msi
