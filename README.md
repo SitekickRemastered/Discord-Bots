@@ -3,11 +3,11 @@
 
 - Creates & syncs a list of Discord Nitro boosters with Sitekick Remastered
 
-- Keeps track of updates and live metrics message
+- Keeps track of and updates live metrics message
 
 ---
 
-## Commands
+# Commands
 **GLOBAL SYNTAX:**
 >/command #channel Optional: [message] [send_as_bot] [mentions] [attachments]
 
@@ -28,7 +28,8 @@
 
 ---
 
-## Dependencies
-JDA - https://github.com/discord-jda/JDA
+# Dependencies
+JDA v5.0.0-beta.17 (Included) - https://github.com/discord-jda/JDA
 
-JDK - 16.0.2
+Amazon Corretto 21 (OpenJDK) - https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.msi
+
