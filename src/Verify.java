@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Verify {
 
@@ -42,8 +43,18 @@ public class Verify {
         // If the response's error code was 1, we give the user the "Verified" role, then change their nickname in the server
         // Then the #general channel sends a message that the user's been verified.
         if (json.get("errorCode").equals(1)) {
+
+            // Add the verified role
             Role role = e.getGuild().getRolesByName("Verified", true).get(0);
             e.getGuild().addRoleToMember(e.getMember(), role).queue();
+
+            // Add the rank if it's they have at least 1XP
+            if (!Objects.equals(json.get("rank").toString(), "None")){
+                Role rank = e.getGuild().getRolesByName(json.get("rank").toString(), true).get(0);
+                e.getGuild().addRoleToMember(e.getMember(), rank).queue();
+            }
+
+            // Change their name
             String gameName = json.get("username").toString();
             e.getMember().modifyNickname(gameName).queue();
             e.getGuild().getTextChannelsByName("general", true).get(0).sendMessage("<@" + e.getMember().getId() + "> has been verified.").queue();
