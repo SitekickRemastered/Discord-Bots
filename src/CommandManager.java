@@ -266,14 +266,15 @@ public class CommandManager extends ListenerAdapter {
         ArrayList<String> roleList = new ArrayList<>() { { add("Administrator" ); add("Developer" ); add("Moderator"); } };
 
         // Set up the first post
+        // We have to do this first to get the total pages from the request. Then we can loop.
         List<NameValuePair> params = new ArrayList<>(1);
         params.add(new BasicNameValuePair("token", dotenv.get("POST_TOKEN")));
         JSONObject json = postRequest(dotenv.get("VERIFIED_MEMBERS_LINK"), params, "Failed to get the Verified Members List");
         JSONArray players = json.getJSONArray("players");
-        System.out.println("\n" + Instant.now() + " Retrieved Page 1 of " + json.getInt("totalPages") + " from the verified members link successfully.");
+        System.out.println("\n" + Instant.now() + " Retrieved Page 1 of " + (json.getInt("totalPages") + 1) + " from the verified members link successfully.");
 
         // Go through every page starting at 1 since we already got page 0 from the first thing
-        for (int i = 1; i < json.getInt("totalPages"); i++){
+        for (int i = 1; i <= json.getInt("totalPages"); i++){
 
             // Go through every player on this page.
             for (int j = 0; j < players.length(); j++){
@@ -325,7 +326,7 @@ public class CommandManager extends ListenerAdapter {
             // Do another POST request for the next page.
             json = postRequest(dotenv.get("VERIFIED_MEMBERS_LINK") + "?page=" + i, params, "Failed to get the Verified Members List");
             players = json.getJSONArray("players");
-            System.out.println("\n" + Instant.now() + " Retrieved Page " + (i + 1) + " of " + json.getInt("totalPages") + " from the verified members link successfully.");
+            System.out.println("\n" + Instant.now() + " Retrieved Page " + (i + 1) + " of " + (json.getInt("totalPages") + 1) + " from the verified members link successfully.");
         }
 
         System.out.println("\n" + Instant.now() + " Finished scanning the Verified Members List!");
