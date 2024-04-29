@@ -8,9 +8,13 @@ A bot that links discord accounts to Sitekick Remastered.
 >/link [code]
 
 # Dependencies
-JDA - https://github.com/discord-jda/JDA
+JDA v5.0.0-beta.23 (Included) - https://github.com/discord-jda/JDA
 
-JDK - 16.0.2
+HttpComponents 5.1.3 - https://hc.apache.org/downloads.cgi
+
+Logback Classic 1.5.6 (Should be installed with Maven) - https://logback.qos.ch/download.html
+
+Amazon Corretto 21 (OpenJDK) - https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.msi
 
 # Other Notes:
 Make sure the environment variables file is named ".env"
