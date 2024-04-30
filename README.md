@@ -20,7 +20,7 @@
 **edit_announcement** - *Edits a message embed.*
 >/edit_announcement [messageId] [message] Optional: [attachments]
 >
-**role_assigner** - *An announcement that should only be made once. Lets people choose roles for messages*
+**role_assigner** - *Creates an embed that lets people choose roles. Should only be made once.*
 > /role_assigner #channel Optional: [message] [send_as_bot] Optional: [mentions] [attachments]
 >
 ---
@@ -34,9 +34,17 @@
 ---
 
 # Dependencies
-JDA v5.0.0-beta.17 (Included) - https://github.com/discord-jda/JDA
+JDA v5.0.0-beta.23 (Included) - https://github.com/discord-jda/JDA
+
+HttpComponents 5.1.3 - https://hc.apache.org/downloads.cgi
+
+Logback Classic 1.5.6 (Should be installed with Maven) - https://logback.qos.ch/download.html
 
 Amazon Corretto 21 (OpenJDK) - https://corretto.aws/downloads/latest/amazon-corretto-21-x64-windows-jdk.msi
 
 # Other Notes:
-Make sure the environment variables file is named ".env"
+Make sure the environment variables file is named ".env".
+
+The .env file should be placed in `src/main/java/org/SitekickRemastered`
+
+There should be two files named `messageId1.txt` and `messageId2.txt` also located in `src/main/java/org/SitekickRemastered`
