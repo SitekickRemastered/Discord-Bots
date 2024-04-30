@@ -18,3 +18,5 @@ Amazon Corretto 21 (OpenJDK) - https://corretto.aws/downloads/latest/amazon-corr
 
 # Other Notes:
 Make sure the environment variables file is named ".env"
+
+The .env file should be placed in `src/main/java/org/SitekickRemastered`

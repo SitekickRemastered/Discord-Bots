@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.SitekickRemastered.commands.*;
+import org.SitekickRemastered.commands.LinkCommand;
 import org.SitekickRemastered.listeners.CommandManager;
 import org.SitekickRemastered.listeners.EventListeners;
 
@@ -24,9 +24,9 @@ public class Main {
         builder.setMemberCachePolicy(MemberCachePolicy.ALL);
 
         ShardManager sm = builder.build();
-        sm.addEventListener(new EventListeners());
+        sm.addEventListener(new EventListeners(dotenv));
 
-        CommandManager cm = new CommandManager(dotenv);
+        CommandManager cm = new CommandManager();
         cm.add(new LinkCommand());
 
         sm.addEventListener(cm);

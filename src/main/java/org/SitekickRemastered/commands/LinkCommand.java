@@ -24,25 +24,30 @@ import java.util.List;
 import java.util.Objects;
 
 public class LinkCommand implements CommandInterface {
+
     @Override
     public String getName() {
         return "link";
     }
+
 
     @Override
     public String getDescription() {
         return "Links your Sitekick Remastered and Discord accounts.";
     }
 
+
     @Override
     public List<OptionData> getOptions() {
         return List.of(new OptionData(OptionType.STRING, "code", "Your code in the \"Link Discord\" Tab in Sitekick Remastered", true));
     }
 
+
     @Override
     public DefaultMemberPermissions getPermissions() {
         return DefaultMemberPermissions.ENABLED;
     }
+
 
     @Override
     public void execute(SlashCommandInteractionEvent e) throws IOException, ParseException {
@@ -52,7 +57,7 @@ public class LinkCommand implements CommandInterface {
             return;
         }
 
-        if (e.getOption("code") == null){
+        if (e.getOption("code") == null) {
             e.reply("Code syntax was incorrect. Please make sure you're typing the command properly.\nUsage: /link [code]").setEphemeral(true).queue();
             return;
         }
@@ -82,7 +87,7 @@ public class LinkCommand implements CommandInterface {
             e.getGuild().addRoleToMember(e.getMember(), role).queue();
 
             // Add the rank if it's they have at least 1XP
-            if (!Objects.equals(json.get("rank").toString(), "None")){
+            if (!Objects.equals(json.get("rank").toString(), "None")) {
                 Role rank = e.getGuild().getRolesByName(json.get("rank").toString(), true).getFirst();
                 e.getGuild().addRoleToMember(e.getMember(), rank).queue();
             }

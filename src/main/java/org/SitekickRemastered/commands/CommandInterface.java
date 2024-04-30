@@ -10,17 +10,18 @@ import java.util.List;
 
 public interface CommandInterface {
 
-    // Returns the name of the command:
+    // Returns the name of the command
     String getName();
 
-    // Returns the description of the command:
+    // Returns the description of the command
     String getDescription();
 
-    // Returns the options for the command:
+    // Returns the options for the command
     List<OptionData> getOptions();
 
+    // Returns the permissions for the command
     DefaultMemberPermissions getPermissions();
 
-    // Executes the command:
+    // Executes the command
     void execute(SlashCommandInteractionEvent e) throws IOException, ParseException;
 }
