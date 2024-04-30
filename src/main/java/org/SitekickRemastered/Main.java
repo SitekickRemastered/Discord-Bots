@@ -14,9 +14,28 @@ import org.SitekickRemastered.listeners.EventListeners;
 public class Main {
 
     public static void main(String[] args) {
+
+        System.out.println("""
+                                  :+#.                                                                        \s
+                                   =-                                                                         \s
+                                   :.                                                                 .:      .
+                                    -                                                           :=+##@@*+*#%@@:
+                                    =                                      .:=+:   .:--        .@*=-=@#++=*@#.\s
+                                    :.                                 :##%#*@@####@@@#- :=+*+-##---#+--=#@=  \s
+                                    -##*==++=-:    ..   :=+*#@@.       %#---#%=--=*=-=#@%#+===#@=--==--+@%:   \s
+                                    *@@#*++=++#@*#%#*%##%+=-*@#==+##*==@=--+*---*@%**%@*--++-+%#------+@*     \s
+                                   #@*=--=-----%@#==+#@%=---**%%*=--=*@*---=--=#@%--=%=-=%@@@@@=----:.-@+     \s
+                                  #%=--*@@%=+*#@@*+=#-..  .:-+-.:*#::-@-------*@@=--#=--%@@#@@+. .*   :@#     \s
+                                 .@+-----=+*#%@@#  .#=-   #@@:  ...:-*+   .   +@=  -@.  ==. -%. .=%   .@@     \s
+                                  %%*=:..     :%.  #@@.  =@@*  *%***#%   ==   =#   %@+.  .-*@@@@@@%-=+#@@:    \s
+                                +#%#*%@@@@=   -=  -@@=   :=*#  ..  +@=.:-%+   :##%@@@%#*****++=======-:       \s
+                               ##    -+=-.   =*  .%@@-    :@@#==+#@@@@@@@@#-====::.                           \s
+                               @+         :+%@%#######*++++==-:::::..                                         \s
+                               :##+===+*%@#=:.                                                                \s
+                                 .:===-:.                                                                     \s""");
+
         Dotenv dotenv = Dotenv.configure().directory("src/main/java/org/SitekickRemastered/.env").load();
         String token = dotenv.get("AUTHICER_TOKEN");
-
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
         builder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "Authenticate in #link!"));
         builder.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT);
