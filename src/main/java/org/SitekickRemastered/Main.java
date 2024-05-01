@@ -34,7 +34,7 @@ public class Main {
                                :##+===+*%@#=:.                                                                \s
                                  .:===-:.                                                                     \s""");
 
-        Dotenv dotenv = Dotenv.configure().directory("src/main/java/org/SitekickRemastered/.env").load();
+        Dotenv dotenv = Dotenv.configure().filename(".env").load();
         String token = dotenv.get("AUTHICER_TOKEN");
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(token);
         builder.setActivity(Activity.of(Activity.ActivityType.PLAYING, "Authenticate in #link!"));
