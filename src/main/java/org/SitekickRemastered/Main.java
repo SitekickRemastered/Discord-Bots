@@ -38,10 +38,10 @@ public class Main {
                                :##+===+*%@#=:.                                                                \s
                                  .:===-:.                                                                     \s""");
         
-        Dotenv dotenv = Dotenv.configure().directory("src/main/java/org/SitekickRemastered/.env").load();
+        Dotenv dotenv = Dotenv.configure().filename(".env").load();
         String token = dotenv.get("KABLOOEY_TOKEN");
-        String roleAnnounceFilePath = "src/main/java/org/SitekickRemastered/messageId1.txt";
-        String metricsFilePath = "src/main/java/org/SitekickRemastered/messageId2.txt";
+        String roleAnnounceFilePath = "messageId1.txt";
+        String metricsFilePath = "messageId2.txt";
 
         String roleAnnounceMessageChannel, roleAnnounceMessageId;
         String metricsMessageChannel, metricsMessageId;
