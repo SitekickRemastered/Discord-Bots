@@ -15,13 +15,13 @@
 
 ---
 **announce** - *Makes an announcement to a specified channel with the pfp and user who sent said announcement*
->/announce #channel [message] [send_as_bot] Optional: [mentions] [attachments]
+>/announce #channel [message] Optional: [send_as_bot] [mentions] [attachments]
 >
 **edit_announcement** - *Edits a message embed.*
 >/edit_announcement [messageId] [message] Optional: [attachments]
 >
 **role_assigner** - *Creates an embed that lets people choose roles. Should only be made once.*
-> /role_assigner #channel Optional: [message] [send_as_bot] Optional: [mentions] [attachments]
+> /role_assigner #channel Optional: [message] Optional: [send_as_bot] [mentions] [attachments]
 >
 ---
 **metrics** - *An announcement that should only be made once. Makes an embed message that contains game metrics in a specific channel.*
