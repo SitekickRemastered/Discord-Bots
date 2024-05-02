@@ -67,9 +67,9 @@ public class RoleAssignCommand implements CommandInterface {
 
         GuildChannelUnion channel = Objects.requireNonNull(e.getOption("channel")).getAsChannel();
         String message = (e.getOption("message") != null) ? Objects.requireNonNull(e.getOption("message")).getAsString() : null;
-        boolean sendAsBot = e.getOption("send_as_bot") == null || Objects.requireNonNull(e.getOption("send_as_bot")).getAsBoolean();
-        IMentionable mention = (e.getOption("mention") == null) ? Objects.requireNonNull(e.getOption("mention")).getAsMentionable() : null;
-        Message.Attachment attachment = (e.getOption("attachment") == null) ? Objects.requireNonNull(e.getOption("attachment")).getAsAttachment() : null;
+        boolean sendAsBot = e.getOption("mention") != null && Objects.requireNonNull(e.getOption("send_as_bot")).getAsBoolean();
+        IMentionable mention = (e.getOption("mention") != null) ? Objects.requireNonNull(e.getOption("mention")).getAsMentionable() : null;
+        Message.Attachment attachment = (e.getOption("attachment") != null) ? Objects.requireNonNull(e.getOption("attachment")).getAsAttachment() : null;
 
         // If there was no message, alert the user and return.
         if (message == null && attachment == null) {

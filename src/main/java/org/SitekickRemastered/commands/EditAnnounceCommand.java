@@ -50,7 +50,7 @@ public class EditAnnounceCommand implements CommandInterface {
 
         String messageId = (e.getOption("message_id") != null) ? Objects.requireNonNull(e.getOption("message_id")).getAsString() : null;
         String message = (e.getOption("message") != null) ? Objects.requireNonNull(e.getOption("message")).getAsString() : null;
-        Message.Attachment attachment = (e.getOption("attachment") == null) ? Objects.requireNonNull(e.getOption("attachment")).getAsAttachment() : null;
+        Message.Attachment attachment = (e.getOption("attachment") != null) ? Objects.requireNonNull(e.getOption("attachment")).getAsAttachment() : null;
 
         // Parse the message ID. Normally, IDs are in the form CHANNEL-MESSAGE, so we have to take out the CHANNEL part
         String[] tempArray = messageId.split("-");
