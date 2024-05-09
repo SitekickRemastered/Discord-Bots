@@ -52,7 +52,7 @@ public class LinkCommand implements CommandInterface {
     @Override
     public void execute(SlashCommandInteractionEvent e) throws IOException, ParseException {
 
-        if (e.getChannel().toString().contains("link")) {
+        if (!e.getChannel().toString().contains("link")) {
             e.reply("Oak's words echoed... \"There's a time and place for everything but not now!\"\n\nPlease use the `/link` command in the <#" + e.getJDA().getTextChannelsByName("link", true).getFirst().getId() + "> channel!").setEphemeral(true).queue();
             return;
         }
