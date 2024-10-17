@@ -1,5 +1,7 @@
 package org.SitekickRemastered.commands;
 
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
@@ -39,7 +41,7 @@ public class LinkCommand implements CommandInterface {
 
     @Override
     public List<OptionData> getOptions() {
-        return List.of(new OptionData(OptionType.STRING, "code", "Your code in the \"Link Discord\" Tab in Sitekick Remastered", true));
+        return List.of(new OptionData(OptionType.STRING, "code", "Your code from the \"Link Discord\" Tab in Sitekick Remastered", true));
     }
 
 
@@ -53,12 +55,24 @@ public class LinkCommand implements CommandInterface {
     public void execute(SlashCommandInteractionEvent e) throws IOException, ParseException {
 
         if (!e.getChannel().toString().contains("link")) {
-            e.reply("Oak's words echoed... \"There's a time and place for everything but not now!\"\n\nPlease use the `/link` command in the <#" + e.getJDA().getTextChannelsByName("link", true).getFirst().getId() + "> channel!").setEphemeral(true).queue();
+            String replyMessage = String.format("""
+                Oak's words echoed... "There's a time and place for everything but not now!"
+                
+                Please use the `/link` command in the <#%s> channel!
+                [More information can be found here](https://sitekickremastered.com/wiki/guides/discord/#how-to-link-your-own-account)
+                """, e.getJDA().getTextChannelsByName("link", true).getFirst().getId());
+            e.reply(replyMessage).setEphemeral(true).queue();
             return;
         }
 
         if (e.getOption("code") == null) {
-            e.reply("Code syntax was incorrect. Please make sure you're typing the command properly.\nUsage: /link [code]").setEphemeral(true).queue();
+            String replyMessage = """
+                Code syntax was incorrect. Please make sure you're typing the command properly.
+                Usage: /link [code]
+                
+                [More information can be found here](https://sitekickremastered.com/wiki/guides/discord/#how-to-link-your-own-account)
+                """;
+            e.reply(replyMessage).setEphemeral(true).queue();
             return;
         }
 
@@ -84,26 +98,53 @@ public class LinkCommand implements CommandInterface {
 
             // Add the verified role
             Role role = Objects.requireNonNull(e.getGuild()).getRolesByName("Verified", true).getFirst();
-            e.getGuild().addRoleToMember(e.getMember(), role).queue();
+            if (!addRoleToUser(e.getGuild(), e.getMember(), role))
+                System.out.println("Failed to add verified role to " + e.getMember().getEffectiveName() + ".");
 
             // Add the rank if it's they have at least 1XP
             if (!Objects.equals(json.get("rank").toString(), "None")) {
                 Role rank = e.getGuild().getRolesByName(json.get("rank").toString(), true).getFirst();
-                e.getGuild().addRoleToMember(e.getMember(), rank).queue();
+                if (!addRoleToUser(e.getGuild(), e.getMember(), rank))
+                    System.out.println("Failed to update " + e.getMember().getEffectiveName() + "'s rank role.");
             }
 
             // Change their name
             String gameName = json.get("username").toString();
             e.getMember().modifyNickname(gameName).queue();
+            if (!changeUsername(e.getMember(), gameName))
+                System.out.println("Failed to update " + e.getMember().getEffectiveName() + "'s name.");
+
+            // Send success message to general and defer reply
             e.getGuild().getTextChannelsByName("general", true).getFirst().sendMessage("<@" + e.getMember().getId() + "> has been verified.").queue();
             e.deferReply().queue(m -> m.deleteOriginal().queue());
         }
         // Otherwise, alert the user that they entered an invalid link code.
-        else {
-            e.reply("<@" + e.getMember().getId() + "> you have entered an invalid link code.").setEphemeral(true).queue();
-        }
+        else
+            e.reply("Hey <@" + e.getMember().getId() + ">! You have entered an invalid link code.").setEphemeral(true).queue();
+
         httpclient.close();
         response.close();
         entity.close();
+    }
+
+    // Runs a loop to ensure a role was added to the user
+    public boolean addRoleToUser(Guild g, Member m, Role r){
+        for (int i = 0; i < 5; i++){
+            g.addRoleToMember(m, r).queue();
+            if (m.getRoles().contains(r))
+                break;
+        }
+        return m.getRoles().contains(r);
+    }
+
+
+    // Runs a loop to ensure the users nickname was changed
+    public boolean changeUsername(Member m, String gameName) {
+        for (int i = 0; i < 5; i++) {
+            m.modifyNickname(gameName).queue();
+            if (Objects.equals(m.getNickname(), gameName))
+                break;
+        }
+        return Objects.equals(m.getNickname(), gameName);
     }
 }

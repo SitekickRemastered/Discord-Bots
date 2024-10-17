@@ -1,5 +1,9 @@
 # Authicer
-A bot that links discord accounts to Sitekick Remastered.
+- Links discord accounts to Sitekick Remastered
+
+- Creates & syncs a list of Discord Nitro boosters with Sitekick Remastered
+
+- Adds rank role to verified members and updates usernames
 
 ---
 
