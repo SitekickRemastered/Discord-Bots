@@ -28,7 +28,7 @@ public class DeleteMetricsCommand implements CommandInterface {
 
     @Override
     public String getDescription() {
-        return "Deletes the metrics message and the messageId2.txt file so you can repost it.";
+        return "Deletes the metrics message and the metricsMessageId.txt file so you can repost it.";
     }
 
 
@@ -56,9 +56,9 @@ public class DeleteMetricsCommand implements CommandInterface {
             metricsMessageChannel = "";
             metricsMessageId = "";
         });
-        File messageId2 = new File("src/messageId2.txt");
+        File messageId2 = new File("src/metricsMessageId.txt");
         if (messageId2.delete())
-            e.reply("Deleted metrics message and messageId2.txt successfully.").setEphemeral(true).queue();
+            e.reply("Deleted metrics message and metricsMessageId.txt successfully.").setEphemeral(true).queue();
         else
             e.reply("Failed to delete metrics file. Please delete it manually if the message was successfully deleted.").setEphemeral(true).queue();
 

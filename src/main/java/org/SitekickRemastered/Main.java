@@ -40,8 +40,8 @@ public class Main {
         
         Dotenv dotenv = Dotenv.configure().filename(".env").load();
         String token = dotenv.get("KABLOOEY_TOKEN");
-        String roleAnnounceFilePath = "messageId1.txt";
-        String metricsFilePath = "messageId2.txt";
+        String roleAnnounceFilePath = "roleMessageId.txt";
+        String metricsFilePath = "metricsMessageId.txt";
 
         String roleAnnounceMessageChannel, roleAnnounceMessageId;
         String metricsMessageChannel, metricsMessageId;
@@ -67,7 +67,7 @@ public class Main {
         builder.setMemberCachePolicy(MemberCachePolicy.ALL);
 
         ShardManager sm = builder.build();
-        sm.addEventListener(new EventListeners(dotenv, roleAnnounceMessageChannel, roleAnnounceMessageId, metricsMessageChannel, metricsMessageId));
+        sm.addEventListener(new EventListeners(dotenv.get("KABLOOEY_PING_LINK"), roleAnnounceMessageChannel, roleAnnounceMessageId, metricsMessageChannel, metricsMessageId));
 
         CommandManager cm = new CommandManager();
         cm.add(new AnnounceCommand());

@@ -1,11 +1,7 @@
 # Kablooey
 - Grants announcement commands for Kablooey
 
-- Creates & syncs a list of Discord Nitro boosters with Sitekick Remastered
-
 - Keeps track of and updates live metrics message
-
-- Adds rank role to verified members and updates usernames
 
 ---
 

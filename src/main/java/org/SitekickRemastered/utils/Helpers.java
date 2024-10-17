@@ -76,6 +76,4 @@ public class Helpers {
 
         return json;
     }
-
-
 }
