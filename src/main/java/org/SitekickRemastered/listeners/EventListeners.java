@@ -114,11 +114,13 @@ public class EventListeners extends ListenerAdapter {
      */
     public void sendNames(Event e) throws IOException, ParseException {
 
+        Guild SK = e.getJDA().getGuildById("603580736250970144");
+
         // Create a list of the IDs of all users who have boosted the server via their Nitro role.
         String boosters;
         List<String> members = new ArrayList<>();
-        for (Member m : e.getJDA().getGuilds().getFirst().loadMembers().get()) {
-            if (m.getRoles().contains(e.getJDA().getGuilds().getFirst().getBoostRole()))
+        for (Member m : SK.loadMembers().get()) {
+            if (m.getRoles().contains(SK.getBoostRole()))
                 members.add(m.getId());
         }
 
