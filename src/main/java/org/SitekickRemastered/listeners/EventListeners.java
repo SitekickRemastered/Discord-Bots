@@ -92,13 +92,13 @@ public class EventListeners extends ListenerAdapter {
         // Nitro and Rank / Name change stuff.
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                sendNames(e);
+                sendRoles();
             }
             catch (IOException | ParseException ignored) {
             }
 
             try {
-                updateUsers(e);
+                updateUsers();
             }
             catch (IOException | ParseException ex) {
                 throw new RuntimeException(ex);
@@ -127,19 +127,15 @@ public class EventListeners extends ListenerAdapter {
      */
     public void onGuildMemberUpdateBoostTime(@NotNull GuildMemberUpdateBoostTimeEvent e) {
         try {
-            sendNames(e);
+            sendRoles();
         }
         catch (IOException | ParseException ignored) {
         }
     }
 
 
-    /**
-     * Sends a list of all verified users with their roles to the game for badges and nitro emblems.
-     *
-     * @param e - Event listener - Generic event listener.
-     */
-    public void sendNames(Event e) throws IOException, ParseException {
+    /** Sends a list of all verified users with their roles to the game for badges and nitro emblems. */
+    public void sendRoles() throws IOException, ParseException {
 
         JSONObject json = new JSONObject();
 
@@ -154,16 +150,12 @@ public class EventListeners extends ListenerAdapter {
         List<NameValuePair> params = new ArrayList<>(2);
         params.add(new BasicNameValuePair("token", dotenv.get("POST_TOKEN")));
         params.add(new BasicNameValuePair("json", json.toString()));
-        postRequest(dotenv.get("NITRO_LINK"), params, "Failed to get the list of Nitro Users");
+        postRequest(dotenv.get("BADGE_UPDATE_LINK"), params, "Failed to get the list of Nitro Users");
     }
 
 
-    /**
-     * Updates the ranks and nicknames of users in the Discord from the game.
-     *
-     * @param e - Event listener - Generic event listener.
-     */
-    public void updateUsers(Event e) throws IOException, ParseException {
+    /** Updates the ranks and nicknames of users in the Discord from the game. */
+    public void updateUsers() throws IOException, ParseException {
 
         Role verifiedRole = SK.getRolesByName("Verified", true).getFirst();
 
