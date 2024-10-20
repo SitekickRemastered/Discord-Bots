@@ -1,10 +1,7 @@
 package org.SitekickRemastered.listeners;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
@@ -29,7 +26,6 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static org.SitekickRemastered.utils.Helpers.*;
 
@@ -39,14 +35,46 @@ public class EventListeners extends ListenerAdapter {
     Dotenv dotenv;
     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
 
+    Guild SK;
+    public static ArrayList<Role> rankList = new ArrayList<>();
+    public static ArrayList<Role> adminRoles = new ArrayList<>();
+    public static ArrayList<Role> allRoles = new ArrayList<>();
+
 
     public EventListeners(Dotenv dotenv) {
         statusURL = dotenv.get("AUTHICER_PING_LINK");
         this.dotenv = dotenv;
     }
 
-
     public void onReady(@NotNull ReadyEvent e) {
+
+        SK = e.getJDA().getGuildById("603580736250970144");
+
+        rankList.addAll(List.of(
+            SK.getRolesByName("Bronze", true).getFirst(),
+            SK.getRolesByName("Silver", true).getFirst(),
+            SK.getRolesByName("Gold", true).getFirst(),
+            SK.getRolesByName("Amethyst", true).getFirst(),
+            SK.getRolesByName("Onyx", true).getFirst()
+        ));
+
+        adminRoles.addAll(List.of(
+            SK.getRolesByName("Administrator", true).getFirst(),
+            SK.getRolesByName("Developer", true).getFirst(),
+            SK.getRolesByName("Moderator", true).getFirst()
+        ));
+
+        allRoles.addAll(adminRoles);
+        allRoles.addAll(rankList);
+        allRoles.addAll( List.of(
+            SK.getRolesByName("Artist", true).getFirst(),
+            SK.getRolesByName("Writer", true).getFirst(),
+            SK.getBoostRole(),
+            SK.getRolesByName("YAP!", true).getFirst(),
+            SK.getRolesByName("Contributor", true).getFirst(),
+            SK.getRolesByName("Beta Tester", true).getFirst(),
+            SK.getRolesByName("Verified", true).getFirst()
+        ));
 
         // Sets a thread to run every minute to ping Authicer's status URL. If it fails, another bot alerts us, so we can fix it.
         scheduler.scheduleAtFixedRate(() -> {
@@ -107,44 +135,35 @@ public class EventListeners extends ListenerAdapter {
 
 
     /**
-     * Sends a list of all users with the Nitro Role to the server.
-     * This is used so users in the game can have the nitro emblem on SK-TV
+     * Sends a list of all verified users with their roles to the game for badges and nitro emblems.
      *
      * @param e - Event listener - Generic event listener.
      */
     public void sendNames(Event e) throws IOException, ParseException {
 
-        Guild SK = e.getJDA().getGuildById("603580736250970144");
+        JSONObject json = new JSONObject();
 
-        // Create a list of the IDs of all users who have boosted the server via their Nitro role.
-        String boosters;
-        List<String> members = new ArrayList<>();
-        for (Member m : SK.loadMembers().get()) {
-            if (m.getRoles().contains(SK.getBoostRole()))
-                members.add(m.getId());
+        // Loads the list of members with the roles in allRoles, then adds them to the json
+        List<String> members;
+        for (Role r : allRoles){
+            members = SK.getMembersWithRoles(r).stream().map(ISnowflake::getId).toList();
+            json.put(r.getName(), members.isEmpty() ? "0" : String.join(",", members));
         }
-
-        // If there are no members with the Nitro role, we make the send message 0.
-        // Otherwise, join the list as a string using commas
-        boosters = (members.isEmpty()) ? "0" : members.stream().map(Object::toString).collect(Collectors.joining(","));
 
         // Send off the information to the server.
         List<NameValuePair> params = new ArrayList<>(2);
         params.add(new BasicNameValuePair("token", dotenv.get("POST_TOKEN")));
-        params.add(new BasicNameValuePair("ids", boosters));
+        params.add(new BasicNameValuePair("json", json.toString()));
         postRequest(dotenv.get("NITRO_LINK"), params, "Failed to get the list of Nitro Users");
     }
 
 
     /**
-     * Updates the ranks and nicknames of users in the Discord.
+     * Updates the ranks and nicknames of users in the Discord from the game.
      *
      * @param e - Event listener - Generic event listener.
      */
     public void updateUsers(Event e) throws IOException, ParseException {
-
-        // Get the Sitekick server
-        Guild SK = e.getJDA().getGuildById("603580736250970144");
 
         Role verifiedRole = SK.getRolesByName("Verified", true).getFirst();
 
@@ -171,7 +190,7 @@ public class EventListeners extends ListenerAdapter {
                 }
 
                 //Set Discord name to name in game
-                if (m.getRoles().stream().noneMatch(element -> roleList.contains(element.getName())) && (m.getNickname() == null || !Objects.equals(m.getNickname(), jsonData.get("username").toString()))) {
+                if (m.getRoles().stream().noneMatch(r -> adminRoles.contains(r)) && (m.getNickname() == null || !Objects.equals(m.getNickname(), jsonData.get("username").toString()))) {
                     m.modifyNickname(jsonData.get("username").toString()).queue(
                         (success) -> System.out.println(Instant.now() + " " + m.getUser().getName() + " Nickname changed to in game name: " + m.getNickname()),
                         (error) -> System.out.println(Instant.now() + " Failed to set new nickname for user: " + m.getUser().getName())
@@ -183,7 +202,7 @@ public class EventListeners extends ListenerAdapter {
                     Role gameRank = SK.getRolesByName(jsonData.get("rank").toString(), true).getFirst();
 
                     for (Role r : m.getRoles()){
-                        if (r != gameRank && rankList.contains(r.getName()))
+                        if (r != gameRank && rankList.contains(r))
                             SK.removeRoleFromMember(UserSnowflake.fromId(m.getUser().getId()), r).queue(
                                 (success) -> System.out.println(Instant.now() + " Rank Role '" + r.getName() + "' REMOVED from user: " + m.getEffectiveName())
                             );

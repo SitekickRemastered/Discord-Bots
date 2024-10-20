@@ -14,30 +14,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Helpers {
-
-    public static ArrayList<String> rankList = new ArrayList<>() {
-        {
-            add("None");
-            add("Bronze");
-            add("Silver");
-            add("Gold");
-            add("Amethyst");
-            add("Onyx");
-        }
-    };
-
-    public static ArrayList<String> roleList = new ArrayList<>() {
-        {
-            add("Administrator");
-            add("Developer");
-            add("Moderator");
-        }
-    };
-
 
     /**
      * Sends a post request to a link. Since the post request has no parameters / arguments, we just need to get the response.
