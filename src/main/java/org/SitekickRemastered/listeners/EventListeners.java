@@ -3,7 +3,6 @@ package org.SitekickRemastered.listeners;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.guild.member.update.GuildMemberUpdateBoostTimeEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
@@ -20,9 +19,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URLConnection;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,9 +33,9 @@ public class EventListeners extends ListenerAdapter {
     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
 
     Guild SK;
-    public static ArrayList<Role> rankList = new ArrayList<>();
-    public static ArrayList<Role> adminRoles = new ArrayList<>();
-    public static ArrayList<Role> allRoles = new ArrayList<>();
+    public static ArrayList<Role>  rankList = new ArrayList<>();
+    public static ArrayList<Role>  adminRoles = new ArrayList<>();
+    public static HashMap<Role, Integer> allRoles = new HashMap<>();
 
 
     public EventListeners(Dotenv dotenv) {
@@ -64,16 +61,21 @@ public class EventListeners extends ListenerAdapter {
             SK.getRolesByName("Moderator", true).getFirst()
         ));
 
-        allRoles.addAll(adminRoles);
-        allRoles.addAll(rankList);
-        allRoles.addAll( List.of(
-            SK.getRolesByName("Artist", true).getFirst(),
-            SK.getRolesByName("Writer", true).getFirst(),
-            SK.getBoostRole(),
-            SK.getRolesByName("YAP!", true).getFirst(),
-            SK.getRolesByName("Contributor", true).getFirst(),
-            SK.getRolesByName("Beta Tester", true).getFirst(),
-            SK.getRolesByName("Verified", true).getFirst()
+        allRoles.putAll(Map.ofEntries(
+            Map.entry(SK.getRolesByName("Beta Tester", true).getFirst(), 7),
+            Map.entry(SK.getRolesByName("Bronze", true).getFirst(), 8),
+            Map.entry(SK.getRolesByName("Silver", true).getFirst(), 9),
+            Map.entry(SK.getRolesByName("Gold", true).getFirst(), 10),
+            Map.entry(SK.getRolesByName("Amethyst", true).getFirst(), 11),
+            Map.entry(SK.getRolesByName("Onyx", true).getFirst(), 12),
+            Map.entry(SK.getRolesByName("Verified", true).getFirst(), 13),
+            Map.entry(SK.getBoostRole(), 14),
+            Map.entry(SK.getRolesByName("Contributor", true).getFirst(), 15),
+            Map.entry(SK.getRolesByName("Artist", true).getFirst(), 16),
+            Map.entry(SK.getRolesByName("Writer", true).getFirst(), 17),
+            Map.entry(SK.getRolesByName("Developer", true).getFirst(), 18),
+            Map.entry(SK.getRolesByName("Moderator", true).getFirst(), 19),
+            Map.entry(SK.getRolesByName("YAP!", true).getFirst(), 21)
         ));
 
         // Sets a thread to run every minute to ping Authicer's status URL. If it fails, another bot alerts us, so we can fix it.
@@ -141,9 +143,9 @@ public class EventListeners extends ListenerAdapter {
 
         // Loads the list of members with the roles in allRoles, then adds them to the json
         List<String> members;
-        for (Role r : allRoles){
+        for (Role r : allRoles.keySet()){
             members = SK.getMembersWithRoles(r).stream().map(ISnowflake::getId).toList();
-            json.put(r.getName(), members.isEmpty() ? "0" : String.join(",", members));
+            json.put(allRoles.get(r).toString(), members.isEmpty() ? "0" : String.join(",", members));
         }
 
         // Send off the information to the server.
