@@ -154,7 +154,6 @@ public class MetricsCommand implements CommandInterface {
 
         // On success, edit the metrics
         if (json != null) {
-            System.out.println(json);
             eb.setDescription("**Online Players:** " + json.get("online_players") +
                             "\n**Players Today:** " + json.get("daily_online_players") +
                             "\n**Registrations Today:** " + json.get("daily_registrations") +
