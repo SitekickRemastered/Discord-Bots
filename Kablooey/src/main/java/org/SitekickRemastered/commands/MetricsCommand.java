@@ -1,5 +1,6 @@
 package org.SitekickRemastered.commands;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
@@ -147,16 +148,19 @@ public class MetricsCommand implements CommandInterface {
         eb.setTimestamp(new Date().toInstant()); //Set up the date
 
         // Get the metrics information from the POSTRequest function
-        JSONObject json = postRequest("https://game.sitekickremastered.com/metrics/generic?q=online_players,daily_online_players,daily_registrations,total_players,total_chips", new ArrayList<>(), "Failed to retrieve metrics from POST");
+        Dotenv dotenv = Dotenv.configure().filename(".env").load();
+        String link = dotenv.get("METRICS_LINK");
+        JSONObject json = postRequest(link, new ArrayList<>(), "Failed to retrieve metrics from POST");
 
         // On success, edit the metrics
         if (json != null) {
+            System.out.println(json);
             eb.setDescription("**Online Players:** " + json.get("online_players") +
-                                  "\n**Players Today:** " + json.get("daily_online_players") +
-                                  "\n**Registrations Today:** " + json.get("daily_registrations") +
-                                  "\n**Total Players:** " + json.get("total_players") +
-                                  "\n**Total Active Chips:** " + json.get("total_chips") +
-                                  "\n\nBrought to you by me <:kablrury:1036832644631117954>"
+                            "\n**Players Today:** " + json.get("daily_online_players") +
+                            "\n**Registrations Today:** " + json.get("daily_registrations") +
+                            "\n**Total Players:** " + json.get("total_players") +
+                            "\n**Total Active Chips:** " + json.get("total_chips") +
+                            "\n\nBrought to you by me <:kablrury:1036832644631117954>"
             );
             System.out.println(Instant.now() + " Updated Metrics Successfully.");
         }
